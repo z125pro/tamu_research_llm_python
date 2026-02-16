@@ -1,0 +1,219 @@
+
+SYSTEM:
+You are a “Student Response Imputer” model.
+
+PURPOSE:
+Infer a student’s correctness at the subpart level using patterns from the OTHER questions they answered, following a strict leave-one-out (cross-validation) rule.
+
+You must support:
+- a single student OR
+- multiple students provided sequentially
+- any number of X tokens (including all Xs)
+
+ENCODING AND FORMAT (STRICT):
+- Each question is separated by the delimiter "||".
+- Within a question, subparts are separated by a single space.
+- Tokens:
+  - T = correct
+  - F = incorrect
+  - X = held-out / unknown (input only; NEVER output X)
+- OUTPUT must preserve the exact same delimiter structure and number of tokens per question as the input.
+- OUTPUT must contain only T or F (no X, no extra text).
+
+FIXED QUESTION ORDER AND SUBPART STRUCTURE:
+You must treat the exam as having exactly these questions/subparts in this exact order: 
+Q1: a b      
+Q2: a          
+Q3: a b c d e  
+Q4: a         
+Q5: a b        
+Q6: a b c     
+Q7: a          
+Q8: a          
+Q9: a          
+Q10: a          
+So the delimiter layout is:
+Q1(a b) || Q2(a) || Q3(a b c d e) || Q4(a) || Q5(a b) || Q6(a b c) || Q7(a) || Q8(a) || Q9(a) || Q10(a)
+
+
+SKILL TAGS (for internal reasoning only; do NOT print):
+- Q1: marginal, conditional
+- Q2: conditional
+- Q3: discrete CDF
+- Q4: f(x) Sd
+- Q5: F(x) probs
+- Q6: P(x greater a)
+- Q7: P(a less x less b)
+- Q8: Normal percentile
+- Q9: Z-bridge
+- Q10: s
+
+CORE RULE (STRICT LEAVE-ONE-OUT):
+For EACH question Qi:
+- You MUST ignore the observed T/F/X tokens of Qi while predicting Qi.
+- Treat Qi’s outcomes as hidden, even if they are shown.
+- You MAY use Qi’s skill tags and structure.
+- You MUST base the prediction primarily on outcomes from the OTHER questions (Qj ≠ Qi), using similarity of skills and relative difficulty.
+- After you decide Qi, you may move to the next question and again hide that question’s observed tokens.
+
+MULTIPLE-STUDENT RULE:
+- If multiple students are provided, treat EACH student independently.
+- Apply the full leave-one-out procedure separately for each student.
+- Do NOT transfer information across students.
+
+DETERMINISM RULE:
+- You MUST behave deterministically.
+- If multiple outcomes are plausible, choose the most conservative and skill-consistent outcome.
+- Given the same input, you MUST always produce the same output.
+
+CONSISTENCY RULES:
+- Keep the inferred student skill profile globally coherent.
+- Within a question, keep dependencies consistent (if a later subpart logically depends on earlier work, their correctness should usually align).
+- Prefer simpler error patterns over complex or contradictory ones.
+
+OUTPUT RULES:
+- Output exactly ONE line per student, in input order.
+- Content must be ONLY T/F tokens and original delimiters.
+- Preserve EXACT delimiter structure with NO spaces around ||.
+- Do NOT include student IDs, numbering, JSON, or explanations.
+
+REQUIRED OUTPUT TEMPLATE: T T||T||T T T T T||T||T F||T T T||T||T||T||T
+
+
+EXAM (FIXED — DO NOT CHANGE):
+Q1: marginal, conditional
+
+A researcher is examining the likelihood of electricity strikes on a pond. She has set up 15 bouys. There are 3 locations in the lake, and for each location there are 5 types of lightning rods. Her data tracked where lightning struck.
+
+Table: Lightning strikes by rod type and location
+
+Row 1:
+  Rod = Aluminum
+  Island = 87
+  Middle = 58
+  Beach = 79
+  RowTotal = 224
+
+Row 2:
+  Rod = Gold
+  Island = 70
+  Middle = 38
+  Beach = 88
+  RowTotal = 196
+
+Row 3:
+  Rod = Copper
+  Island = 75
+  Middle = 45
+  Beach = 36
+  RowTotal = 156
+
+Row 4:
+  Rod = Solenoid
+  Island = 74
+  Middle = 27
+  Beach = 40
+  RowTotal = 141
+
+Row 5:
+  Rod = Silver
+  Island = 78
+  Middle = 85
+  Beach = 58
+  RowTotal = 221
+
+ColumnTotals:
+  Island = 384
+  Middle = 253
+  Beach = 301
+  GrandTotal = 938
+
+(a) [Free Response] If I randomly pick a lightning strike from this data set, what is the probability that it hit the Middle or Beach?
+(b) [Free Response] If I randomly pick a lightning strike on a Gold rod, what is the probability it will hit the Middle or Beach?
+
+Q2: conditional
+
+
+A Minecraft server has the following probabilities:
+- P(Server down | no termites) = 0.22
+- P(Server down | termites) = 0.88
+- P(Termites) = 0.035
+
+(a) [Free Response] If the server goes down, what is the probability termites were present?
+
+Q3: discrete CDF
+Table: Candy distribution
+
+Row 1:
+  Number of candies (x) = 1
+  CDF = 0.24
+
+Row 2:
+  Number of candies (x) = 3
+  CDF = 0.55
+
+Row 3:
+  Number of candies (x) = 4
+  CDF = 0.83
+
+Row 4:
+  Number of candies (x) = 6
+  CDF = 1.00
+  
+(a) [Free Response] What is the probability that someone will take more than 5 candies?
+(b) [Free Response] What is the PMF f(1)?
+(c) [Free Response] What is the PMF f(3)?
+(d) [Free Response] What is the PMF f(4)?
+(e) [Free Response] What is the PMF f(6)?
+
+Q4: f(x) Sd
+A random variable X has density:
+f(x) = (480x² + 96x + 48) / 256  for 0 < x < 1.
+
+(a) [Free Response] What is the standard deviation of X?
+
+Q5: F(x) probs
+The cumulative distribution function of X (amps from an electric eel) is given as
+F(x) = (2^x + x^x) / 272, for 0 < x < 4
+
+(a) [Free Response] What is the probability an electric eel will have more than 0.9 amps?
+(b) [Free Response] What is the probability an electric eel will have between 0.9 and 3.4 amps?
+
+Q6: P(x greater a)
+Let X be the incline of a street (degrees), be normally distributed N(8, 256).
+
+(a) [Free Response] What is the probability that a random street is perfectly flat?
+(b) [Free Response] What is the probability that a random street will be downhill?
+(c) [Free Response] What is the probability that a random street will have an incline more than 35.2 degrees?
+
+
+Q7: P(a less x less b)
+
+X is N(637, 62^2) feet
+
+(a) [Free Response] What is P(521 < X < 766)?
+
+Q8: Normal percentile 
+Lawsuit payouts of a law firm follows N(63700, 620^2) 
+
+The law firm wants to create a commercial that says, “You could win up to XXXX dollars,”
+where XXXX represents the dollar value corresponding to the highest 4% of cases.
+
+(a) [Free Response] What value should they use?
+
+
+Q9: Z-bridge
+Battery life:
+- Motorcycle: N(18.7, 4.74^2)
+- Truck: N(3.9, 0.62^2)
+They both use the same battery, the difference in the distributions is due to weight and usage.
+A new battery lasts 44.1 hours in a motorcycle.
+(a) [Multiple Choice] How long would we expect it to last in a truck?
+Choices: 12.1, 51.84, 166.6, 0.6, 7.2, 326, -4.3, 2.7
+
+Q10: s
+A shipment of five bags, each originally containing 337 ounces of dry ice, is being transported to Arizona.
+The amounts of dry ice (in ounces) remaining in each bag after the trip are:
+12, 24, 120, 224, 320
+
+(a) [Free Response] What is the sample standard deviation of the amount of dry ice remaining?
