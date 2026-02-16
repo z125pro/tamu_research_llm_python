@@ -1,0 +1,257 @@
+T T||T||T T T T T||T||T T||T T T||T||T||F||T  	Correct
+T T||T||F T T T T||T||T T||T T T||T||T||F||T  	Wrong: F F
+T T||F||F T T T T||T||T T||T T T||T||T||T||T  	Wrong: F T
+T T||T||T F F F F||T||F F||F F T||T||T||F||F  	Wrong: T T
+T T||T||T F F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||F F F F F||F||F F||F F T||T||T||T||F  	Correct
+T T||F||T F F F F||F||F F||T F F||F||F||T||T  	Correct
+F F||T||T T F T F||F||F F||T T T||T||T||F||T  	Wrong: T T
+T T||T||T T F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||F F T||F||T||T||T  	Correct
+T T||T||T T T T T||F||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||F||T  	Correct
+F T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||F F F F F||F||F F||T T T||T||T||T||F  	Wrong: T T
+T T||T||F T T T T||F||F F||T T T||T||T||T||T  	Wrong: T F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T F F F F||T||F F||T T T||F||T||F||T  	Wrong: T T
+T T||T||T T T F T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T F F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||F T F F F||T||F F||T T T||T||T||T||T  	Correct
+F F||T||F F F F F||F||F F||F F F||F||T||F||F  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||F T F F F||F||F F||T T T||T||F||F||T  	Wrong: T T
+T T||T||T T T T T||F||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||F||T  	Wrong: T F
+T T||T||T T T T T||T||T T||F T T||T||T||T||F  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T F T||T||F F||F F F||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+F F||T||T T F F T||T||T T||T T F||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||F F||T T F||T||T||T||T  	Wrong: T T
+T T||T||F F F F F||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+F F||T||T T T T T||T||F F||T T T||T||T||T||T  	Wrong: T T
+F T||T||T T T T T||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||F||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T F F F||T||F F||F T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T F||T||T T F F T||T||F F||T F T||T||T||T||T  	Wrong: T F
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+T F||T||F T F F F||T||F F||T T T||T||T||T||F  	Wrong: T T
+T F||T||F F F F F||F||F F||T T T||T||T||F||F  	Correct
+F F||T||F T F T T||F||F F||T T T||T||T||F||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F F F F F||T||T T||F F T||T||T||T||T 	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||T T T||T||T||F||F  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Correct
+T T||T||F F F F F||F||F F||F F F||F||F||T||F  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T T T F||F||F F||T T F||T||T||F||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||F||F F||T T T||T||T||F||F  	Wrong: T T
+T T||F||T T T T T||F||T T||T T T||T||T||T||T  	Wrong: F T
+F F||F||F T F F F||T||F F||T F T||T||F||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||F||F T F F F||T||T T||F F T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T F||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T F F F||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||F||F F||F T T||T||T||T||T  	Correct
+T T||F||T T T T T||F||T T||T F F||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||F  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||F||T T||T T F||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+F F||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||F T T||T||F||F||T  	Wrong: T F
+T T||F||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||F||F F||F T T||T||T||T||F  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F F F||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||F||T T||T T T||T||T||T||T  	Correct
+T T||F||F T F F F||T||T T||F F T||T||T||T||T  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F F F F F||T||F F||F F F||F||F||T||T  	Correct
+T F||F||T T T T T||T||T T||T F T||T||F||T||F  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F F F F F||T||T T||T F T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||F T T F F||T||T T||F T T||F||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T F F F||T||T T||F F T||T||T||F||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T F F F||T||T T||T F T||T||T||T||T  	Correct
+T T||T||F T F F F||T||T T||T T T||T||T||T||F  	Correct
+T T||T||T F T F F||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Wrong: F F
+T T||T||F T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F F T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T F||T||T T T T T||T||T T||T T T||T||F||F||F  	Correct
+T T||T||F T F F F||F||F F||F F T||T||T||T||F  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+T T||F||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+T T||T||F T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F F F F F||T||T T||T T T||T||T||T||T  	Correct
+F F||T||T T T F T||T||T T||F F T||T||T||T||T  	Correct
+F F||T||F T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||F T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+F T||T||T T T T T||T||T T||T T T||F||F||T||F  	Wrong: F F
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+T T||T||F F F F F||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||F  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T F F F||F||F F||F T F||F||F||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F F T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||F||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||F||T||T  	Correct
+T T||T||T T T T T||T||T T||T T F||T||T||T||T  	Correct
+T T||T||F T T T T||T||T T||F T T||T||F||F||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+F F||T||T T F F F||T||T T||F F F||T||T||T||T  	Correct
+T F||T||T T T T T||T||T T||T F F||F||F||T||F  	Wrong: T F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||F T F F F||F||F F||F F T||F||F||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+T T||T||T F F F F||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T T T T||T||T T||F T T||T||T||T||T  	Correct
+T T||T||T T F F F||T||T T||F F T||F||T||T||T  	Wrong: F F
+T F||T||T T T T T||F||F F||T F T||T||T||T||T  	Wrong: F T
+T T||T||F F F F F||T||T T||F T F||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+T T||F||F F F F F||F||F F||F F F||T||T||F||F  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T F T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||F  	Correct
+T T||F||T T F F F||F||F F||F T T||T||T||T||F  	Correct
+T T||T||T T T T F||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F T T T T||F||F F||T T F||T||T||F||T  	Wrong: T T
+F F||T||T T T T T||T||T T||T T T||F||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T F F F F||T||T T||F F T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||F T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T F||T||T||T||T  	Correct
+T F||F||F F F F F||F||F F||F F T||F||T||T||F  	Correct
+T T||T||T F F F F||T||T T||T T T||T||T||F||T  	Correct
+T F||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||F||F  	Correct
+T T||T||T T T T T||T||T T||T F T||T||T||T||T  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T F||T||F T F F F||T||T T||T T T||T||T||T||F  	Correct
+F T||T||F T T T T||T||T T||T F T||T||T||T||T  	Correct
+T T||T||T F F F F||T||T T||F F F||F||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||F F T||T||T||T||T  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||F||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||F F F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||F||T F F F F||F||F F||F F T||F||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||F||F F||F F T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+T T||T||F F F F F||T||F F||T T T||T||T||T||T  	Wrong: T T
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Wrong: F F
+F F||T||F F F F F||T||F F||F T T||F||F||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||F T T||T||T||T||T  	Wrong: F F
+T T||T||T T T T T||T||T T||F F T||T||T||T||T  	Correct
+T F||F||T F F F F||F||F F||T F T||T||T||T||T  	Wrong: T T
+F F||T||T T T T T||F||F F||T F T||T||T||T||T  	Correct
+T T||T||F T T T T||T||T T||T T T||T||T||T||T  	Wrong: T F
+F F||T||T F F F F||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F  	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T T T T T||F||F F||T T T||T||T||T||T  	Wrong: T F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T  	Correct
+T T||T||T F F F F||T||T T||T T T||T||T||T||T  	Wrong: F T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Wrong: T F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Wrong: F F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F	Wrong: F F
+T T||T||T T T T T||F||F F||T T F||T||T||T||T 	Wrong: T T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T	Correct
+T T||T||T T T T T||T||T T||T T T||T||T||T||F	Correct
