@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 from extract_exam_scores import csv_to_student_response_block
 
 EXAM1_BLOCK_SIZES = (2, 1, 5, 1, 2, 3, 1, 1, 1, 1)
@@ -122,9 +122,19 @@ def load_aligned_token_dfs(original_file, llm_file, exam="exam1"):
             llm_text = f.read()
     except FileNotFoundError:
         raise FileNotFoundError(f"Could not find text file: {llm_file}")
+    lines_orig = [line.strip() for line in original_text.strip().splitlines() if line.strip()]
+    lines_llm_raw = [line.strip() for line in llm_text.strip().splitlines() if line.strip()]
 
-    lines_orig = original_text.strip().splitlines()
-    lines_llm = llm_text.strip().splitlines()
+    lines_llm = []
+    removed_header_rows = 0
+    for line in lines_llm_raw:
+        if line.lower().startswith("student responses"):
+            removed_header_rows += 1
+            continue
+        lines_llm.append(line)
+
+    if removed_header_rows:
+        print(f"Info: Removed {removed_header_rows} header row(s) from LLM output.")
 
     if len(lines_orig) != len(lines_llm):
         min_len = min(len(lines_orig), len(lines_llm))
@@ -218,8 +228,9 @@ def truth_pred_metrics_for_filtered_question_df(truth_df, pred_df):
     pred_true_when_wrong = int(((pred == "T") & wrong_mask).sum())
     llm_true_count = int((pred == "T").sum())
 
-    prop_predict_false_when_false = (pred_false_when_false / true_f_count) if true_f_count > 0 else 0.0
-    prop_predict_true_when_wrong = (pred_true_when_wrong / wrong_total) if wrong_total > 0 else 0.0
+    prop_recall_false = (pred_false_when_false / true_f_count) if true_f_count > 0 else 0.0
+    prop_recall_true = recall
+    prop_true_when_wrong = (pred_true_when_wrong / wrong_total) if wrong_total > 0 else 0.0
     prop_llm_predicting_true = (llm_true_count / total_count) if total_count > 0 else 0.0
     accuracy = (correct_total / total_count) if total_count > 0 else 0.0
     baseline_proportion_true = (true_t_count / total_count) if total_count > 0 else 0.0
@@ -228,8 +239,9 @@ def truth_pred_metrics_for_filtered_question_df(truth_df, pred_df):
     return {
         "accuracy": accuracy,
         "f1_t": f1_t,
-        "prop_predict_false_when_false": prop_predict_false_when_false,
-        "prop_predict_true_when_wrong": prop_predict_true_when_wrong,
+        "prop_recall_false": prop_recall_false,
+        "prop_recall_true": prop_recall_true,
+        "prop_true_when_wrong": prop_true_when_wrong,
         "prop_llm_predicting_true": prop_llm_predicting_true,
         "baseline_proportion_true": baseline_proportion_true,
         "full_question_match_acc": full_question_match_acc,
@@ -256,24 +268,117 @@ def get_question_slice(exam, question_num):
 def f1_and_truth_proportion_metrics_by_question(
     original_file,
     llm_file,
+    question_nums=None,
     exam="exam1",
     return_averages=False,
+    shuffle_llm_rows=False,
+    shuffle_seed=None,
+    bootstrap_repeats=1,
+    bootstrap_seed=None,
 ):
     """
-    Computes per-question F1 and truth-proportion metrics:
-    - Accuracy.
-    - F1(T), treating T as the positive class.
-    - Proportion of LLM-predicted false among truth=false cells.
-    - Proportion of LLM-predicted true among incorrectly predicted cells.
-    - Proportion of cells where the LLM predicts true.
-    - Baseline proportion true from ground truth only:
-      count(T) / total.
+    Flexible metrics helper.
+
+    Supported modes:
+    1) Single file, all questions (backward-compatible):
+       llm_file: str, question_nums=None
+    2) Single file, selected questions:
+       llm_file: str, question_nums=[...]
+    3) Pairwise file/question evaluation:
+       llm_file: [file1, file2, ...], question_nums=[q1, q2, ...]
+       (same length arrays)
+
+    4) Permutation baseline mode:
+       shuffle_llm_rows=True to shuffle LLM rows before scoring.
+       Optionally set shuffle_seed for reproducible shuffles.
+
+    5) Bootstrap expansion mode:
+       bootstrap_repeats > 1 to append repeated resamples of df_llm
+       (with replacement), paired with repeated df_orig blocks.
+       Optionally set bootstrap_seed for reproducible resamples.
+
+    Returns per-row metrics with:
+    - accuracy
+    - f1_t
+    - prop_recall_false
+    - prop_recall_true
+    - prop_true_when_wrong
+    - prop_llm_predicting_true
+    - baseline_proportion_true
     """
-    df_orig, df_llm = load_aligned_token_dfs(original_file, llm_file, exam=exam)
     block_sizes = EXAM_SCHEMAS[exam]
 
+    if isinstance(llm_file, (list, tuple)):
+        llm_files = list(llm_file)
+    else:
+        llm_files = [llm_file]
+
+    if question_nums is None:
+        if len(llm_files) == 1:
+            question_nums = list(range(1, len(block_sizes) + 1))
+        else:
+            raise ValueError(
+                "question_nums is required when passing multiple llm files."
+            )
+    elif isinstance(question_nums, int):
+        question_nums = [question_nums]
+    else:
+        question_nums = list(question_nums)
+
+    # Pairing rules:
+    # - 1 file + many questions -> reuse same file
+    # - N files + N questions -> pair by index
+    if len(llm_files) == 1 and len(question_nums) >= 1:
+        eval_pairs = [(llm_files[0], q) for q in question_nums]
+    elif len(llm_files) == len(question_nums):
+        eval_pairs = list(zip(llm_files, question_nums))
+    else:
+        raise ValueError(
+            "Length mismatch: provide either one llm file for many questions, "
+            "or equal-length llm_file/question_nums arrays."
+        )
+
+    # Cache tokenized DataFrames so repeated files are loaded once.
+    file_cache = {}
     results = []
-    for question_num in range(1, len(block_sizes) + 1):
+
+    for llm_path, question_num in eval_pairs:
+        if llm_path not in file_cache:
+            df_orig, df_llm = load_aligned_token_dfs(
+                original_file, llm_path, exam=exam
+            )
+            if shuffle_llm_rows:
+                # Permutation baseline: keep truth fixed, break row alignment in predictions.
+                row_state = None
+                if shuffle_seed is not None:
+                    row_state = shuffle_seed + (sum(ord(ch) for ch in str(llm_path)) % 100000)
+                df_orig = df_orig.reset_index(drop=True)
+                df_llm = df_llm.sample(frac=1, random_state=row_state).reset_index(drop=True)
+
+            repeats = 1 if bootstrap_repeats is None else int(bootstrap_repeats)
+            if repeats < 1:
+                raise ValueError("bootstrap_repeats must be >= 1")
+            if repeats > 1:
+                df_orig_base = df_orig.reset_index(drop=True)
+                df_llm_base = df_llm.reset_index(drop=True)
+
+                # Expand both truth and prediction pools, then resample predictions.
+                df_orig = pd.concat([df_orig_base] * repeats, ignore_index=True)
+                df_llm_pool = pd.concat([df_llm_base] * repeats, ignore_index=True)
+
+                row_state = None
+                if bootstrap_seed is not None:
+                    row_state = bootstrap_seed + (sum(ord(ch) for ch in str(llm_path)) % 100000)
+
+                df_llm = df_llm_pool.sample(
+                    n=len(df_llm_pool),
+                    replace=True,
+                    random_state=row_state,
+                ).reset_index(drop=True)
+
+            file_cache[llm_path] = (df_orig, df_llm)
+        df_orig, df_llm = file_cache[llm_path]
+
         start_col, end_col = get_question_slice(exam, question_num)
         truth_df = df_orig.iloc[:, start_col:end_col]
         pred_df = df_llm.iloc[:, start_col:end_col]
@@ -281,11 +386,13 @@ def f1_and_truth_proportion_metrics_by_question(
 
         results.append(
             {
+                "llm_file": llm_path,
                 "question": question_num,
                 "accuracy": metrics["accuracy"],
                 "f1_t": metrics["f1_t"],
-                "prop_predict_false_when_false": metrics["prop_predict_false_when_false"],
-                "prop_predict_true_when_wrong": metrics["prop_predict_true_when_wrong"],
+                "prop_recall_false": metrics["prop_recall_false"],
+                "prop_recall_true": metrics["prop_recall_true"],
+                "prop_true_when_wrong": metrics["prop_true_when_wrong"],
                 "prop_llm_predicting_true": metrics["prop_llm_predicting_true"],
                 "baseline_proportion_true": metrics["baseline_proportion_true"],
             }
@@ -297,8 +404,9 @@ def f1_and_truth_proportion_metrics_by_question(
     metric_keys = [
         "accuracy",
         "f1_t",
-        "prop_predict_false_when_false",
-        "prop_predict_true_when_wrong",
+        "prop_recall_false",
+        "prop_recall_true",
+        "prop_true_when_wrong",
         "prop_llm_predicting_true",
         "baseline_proportion_true",
     ]
@@ -307,7 +415,6 @@ def f1_and_truth_proportion_metrics_by_question(
         for key in metric_keys
     }
     return results, averages
-
 if __name__ == "__main__":
     original_file = "llm_data/exam1/exam1_crawford.csv"
     llm_file = "results_gemini_flash_1_exam1_crawford_masked_q10.txt"
@@ -324,20 +431,25 @@ if __name__ == "__main__":
         return_averages=True,
     )
     print(
-        "Question\tAccuracy\tF1(T)\tPropPredictFalseWhenFalse\tPropPredictTrueWhenWrong\t"
-        "PropLLMPredictingTrue\tBaselinePropTrue"
+        "Question\tAccuracy\tF1(T)\tPropRecallFalse\tPropRecallTrue\t"
+        "PropTrueWhenWrong\tPropLLMPredictingTrue\tBaselinePropTrue"
     )
     for row in metric_rows:
         print(
             f"q{row['question']}\t{row['accuracy']:.4f}\t{row['f1_t']:.4f}\t"
-            f"{row['prop_predict_false_when_false']:.4f}\t{row['prop_predict_true_when_wrong']:.4f}\t"
-            f"{row['prop_llm_predicting_true']:.4f}\t"
+            f"{row['prop_recall_false']:.4f}\t{row['prop_recall_true']:.4f}\t"
+            f"{row['prop_true_when_wrong']:.4f}\t{row['prop_llm_predicting_true']:.4f}\t"
             f"{row['baseline_proportion_true']:.4f}"
         )
     print(
         f"Average\t{metric_averages['accuracy']:.4f}\t{metric_averages['f1_t']:.4f}\t"
-        f"{metric_averages['prop_predict_false_when_false']:.4f}\t"
-        f"{metric_averages['prop_predict_true_when_wrong']:.4f}\t"
-        f"{metric_averages['prop_llm_predicting_true']:.4f}\t"
+        f"{metric_averages['prop_recall_false']:.4f}\t"
+        f"{metric_averages['prop_recall_true']:.4f}\t"
+        f"{metric_averages['prop_true_when_wrong']:.4f}\t{metric_averages['prop_llm_predicting_true']:.4f}\t"
         f"{metric_averages['baseline_proportion_true']:.4f}"
     )
+
+
+
+
+

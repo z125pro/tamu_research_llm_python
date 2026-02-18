@@ -1,4 +1,4 @@
-import argparse
+﻿import argparse
 import logging
 import os
 import random
@@ -176,6 +176,109 @@ def call_deepseek(system_prompt, student_prompt, variant="v3.2", settings=None):
     return response.choices[0].message.content.strip()
 
 
+def _openrouter_model_name(provider_prefix, variant):
+    if variant.startswith(f"{provider_prefix}/"):
+        return variant
+    if "/" in variant:
+        return variant
+    return f"{provider_prefix}/{variant}"
+
+
+@robust_retry
+def call_minimax(system_prompt, student_prompt, variant="minimax/minimax-m2.5", settings=None):
+    settings = settings or PROFILE_SETTINGS["very_low"]
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+
+    model_name = _openrouter_model_name("minimax", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        temperature=settings["temperature"],
+        top_p=settings["top_p"],
+        max_tokens=settings["max_output_tokens"],
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": settings["reasoning_effort"],
+                "exclude": True,
+            }
+        },
+    )
+
+    return response.choices[0].message.content.strip()
+
+
+@robust_retry
+def call_kimi(system_prompt, student_prompt, variant="moonshotai/kimi-k2.5", settings=None):
+    settings = settings or PROFILE_SETTINGS["very_low"]
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+
+    model_name = _openrouter_model_name("moonshotai", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        temperature=settings["temperature"],
+        top_p=settings["top_p"],
+        max_tokens=settings["max_output_tokens"],
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": settings["reasoning_effort"],
+                "exclude": True,
+            }
+        },
+    )
+
+    return response.choices[0].message.content.strip()
+
+
+@robust_retry
+def call_qwen(
+    system_prompt,
+    student_prompt,
+    variant="qwen/qwen3.5-397b-a17b",
+    settings=None,
+):
+    settings = settings or PROFILE_SETTINGS["very_low"]
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+
+    model_name = _openrouter_model_name("qwen", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        temperature=settings["temperature"],
+        top_p=settings["top_p"],
+        max_tokens=settings["max_output_tokens"],
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": settings["reasoning_effort"],
+                "exclude": True,
+            }
+        },
+    )
+
+    return response.choices[0].message.content.strip()
+
+
 @robust_retry
 def call_claude(system_prompt, student_prompt, variant="haiku", settings=None):
     settings = settings or PROFILE_SETTINGS["very_low"]
@@ -183,6 +286,8 @@ def call_claude(system_prompt, student_prompt, variant="haiku", settings=None):
 
     if variant in {"haiku", "sonnet", "opus"}:
         model_name = f"claude-{variant}-4-5"
+    elif variant in {"opus-4-6", "claude-opus-4-6"}:
+        model_name = "claude-opus-4-6"
     else:
         model_name = variant
 
@@ -327,6 +432,9 @@ def run_dumb_llm_job(
         "chatgpt": call_chatgpt,
         "grok": call_grok,
         "deepseek": call_deepseek,
+        "minimax": call_minimax,
+        "kimi": call_kimi,
+        "qwen": call_qwen,
         "claude": call_claude,
         "gemini": call_gemini,
     }
@@ -342,7 +450,7 @@ def run_dumb_llm_job(
         with open(exam_file, "r", encoding="utf-8") as f:
             exam_text = f.read().strip()
         base_system_prompt = (
-            f"{base_system_prompt}\n\nEXAM (FIXED - DO NOT CHANGE):\n{exam_text}"
+            f"{base_system_prompt}\n\n------------------------------------------------\n{exam_text}"
         )
 
     system_prompt = with_low_effort_overlay(base_system_prompt)
@@ -428,7 +536,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Run low-effort LLM experiments to emulate low-performing students."
     )
-    parser.add_argument("--codeword", default="chatgpt", choices=["chatgpt", "grok", "deepseek", "claude", "gemini"])
+    parser.add_argument("--codeword", default="chatgpt", choices=["chatgpt", "grok", "deepseek", "minimax", "kimi", "qwen", "claude", "gemini"])
     parser.add_argument("--variant", default="mini")
     parser.add_argument("--system-prompt-file", default=r"llm_data/system_prompt.txt")
     parser.add_argument("--exam-file")
@@ -469,4 +577,6 @@ if __name__ == "__main__":
         output_file=args.output_file,
         seed=args.seed,
     )
+
+
 

@@ -1,4 +1,4 @@
-import os
+﻿import os
 import time
 from openai import OpenAI
 from google import genai
@@ -63,8 +63,7 @@ def call_grok(system_prompt, student_prompt, variant="4"):
 
     chat = client.chat.create(
         model=model_name,
-        store_messages=False,
-        temperature=0
+        store_messages=False
     )
 
     chat.append(system(system_prompt))
@@ -85,9 +84,7 @@ def call_deepseek(system_prompt, student_prompt, variant = "v3.2"):
 
     response = client.chat.completions.create(
         model=model_name,
-        temperature=0,
-        max_tokens=13000,
-        top_p=1.0,
+        max_tokens=20000,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": student_prompt},
@@ -102,30 +99,152 @@ def call_deepseek(system_prompt, student_prompt, variant = "v3.2"):
     return response.choices[0].message.content.strip()
 
 
+# ---------- Z.AI (OpenAI-compatible) ----------
+@robust_retry
+def call_zai(system_prompt, student_prompt, variant="glm-5"):
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+
+    model_name = f"z-ai/{variant}"
+
+    response = client.chat.completions.create(
+        model=model_name,
+        max_tokens=20000,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": "high",
+                "exclude": True
+            }
+        }
+    )
+    return response.choices[0].message.content.strip()
+
+
+def _openrouter_model_name(provider_prefix, variant):
+    if variant.startswith(f"{provider_prefix}/"):
+        return variant
+    if "/" in variant:
+        return variant
+    return f"{provider_prefix}/{variant}"
+
+
+# ---------- MiniMax via OpenRouter ----------
+@robust_retry
+def call_minimax(system_prompt, student_prompt, variant="minimax/minimax-m2.5"):
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+    model_name = _openrouter_model_name("minimax", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        max_tokens=20000,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": "high",
+                "exclude": True,
+            }
+        },
+    )
+    return response.choices[0].message.content.strip()
+
+
+# ---------- Kimi via OpenRouter ----------
+@robust_retry
+def call_kimi(system_prompt, student_prompt, variant="moonshotai/kimi-k2.5"):
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+    model_name = _openrouter_model_name("moonshotai", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        max_tokens=20000,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": "high",
+                "exclude": True,
+            }
+        },
+    )
+    return response.choices[0].message.content.strip()
+
+
+# ---------- Qwen via OpenRouter ----------
+@robust_retry
+def call_qwen(system_prompt, student_prompt, variant="qwen/qwen3.5-397b-a17b"):
+    client = OpenAI(
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+    )
+    model_name = _openrouter_model_name("qwen", variant)
+
+    response = client.chat.completions.create(
+        model=model_name,
+        max_tokens=20000,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": student_prompt},
+        ],
+        extra_body={
+            "reasoning": {
+                "effort": "high",
+                "exclude": True,
+            }
+        },
+    )
+    return response.choices[0].message.content.strip()
+
+
 # ---------- Claude ----------
 @robust_retry
 def call_claude(system_prompt, student_prompt, variant = "haiku"):
     import anthropic
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-    model_name = f"claude-{variant}-4-5"
-
-    response = client.messages.create(
+    if variant in {"haiku", "sonnet", "opus"}:
+        model_name = f"claude-{variant}-4-5"
+    elif variant in {"opus-4-6", "claude-opus-4-6"}:
+        model_name = "claude-opus-4-6"
+    elif variant.startswith("claude-"):
+        model_name = variant
+    else:
+        model_name = f"claude-{variant}-4-5"
+    with client.messages.stream(
         model=model_name,
-        max_tokens=13000,
-        top_p=1.0,
+        max_tokens=50000,
+        thinking={"type": "adaptive"},
+        output_config={"effort": "medium"},
         system=system_prompt,
         messages=[
             {"role": "user", "content": student_prompt}
-        ],
-        thinking={
-            "type": "enabled",
-            "budget_tokens": 10000
-        },
-    )
-    for block in response.content:
-        if block.type == "text":
-            return block.text.strip()
+        ]
+    ) as stream:
+        final_message = stream.get_final_message()
+
+    text_blocks = [
+        block.text.strip()
+        for block in final_message.content
+        if getattr(block, "type", None) == "text" and block.text.strip()
+    ]
+    if text_blocks:
+        return "\n".join(text_blocks)
     return ""
 
 
@@ -134,7 +253,7 @@ def call_claude(system_prompt, student_prompt, variant = "haiku"):
 def call_gemini(system_prompt, student_prompt, variant="flash"):
     client = genai.Client(
         api_key=os.getenv("GEMINI_API_KEY"),
-        http_options={'timeout': 120000}
+        http_options={'timeout': 900000}
     )
     model_name = "gemini-3-flash-preview" if variant == "flash" else "gemini-3-pro-preview"
     
@@ -181,6 +300,7 @@ def run_llm_job(
     mask_question_blocks=None,
     mask_char="X",
     output_file=None,
+    output_folder=None,
 ):
     """
     Runs LLM calls with a fixed SYSTEM prompt and per-line STUDENT responses.
@@ -192,6 +312,10 @@ def run_llm_job(
         "chatgpt": call_chatgpt,
         "grok": call_grok,
         "deepseek": call_deepseek,
+        "zai": call_zai,
+        "minimax": call_minimax,
+        "kimi": call_kimi,
+        "qwen": call_qwen,
         "claude": call_claude,
         "gemini": call_gemini,
     }
@@ -208,7 +332,7 @@ def run_llm_job(
     if exam_file:
         with open(exam_file, "r", encoding="utf-8") as f:
             exam_text = f.read().strip()
-        system_prompt = f"{system_prompt}\n\nEXAM (FIXED - DO NOT CHANGE):\n{exam_text}"
+        system_prompt = f"{system_prompt}\n\n------------------------------------------------\n{exam_text}"
 
     # Load student responses
     student_responses = csv_to_student_response_block(student_responses_file).splitlines()
@@ -226,6 +350,11 @@ def run_llm_job(
                 sorted_blocks = sorted(set(mask_question_blocks))
                 masked_tag = "_masked_q" + "-".join(str(b) for b in sorted_blocks)
         output_file = f"results_{codeword}_{variant}_{batch_size}_{base_filename}{masked_tag}.txt"
+
+    if output_folder:
+        os.makedirs(output_folder, exist_ok=True)
+        if not os.path.isabs(output_file):
+            output_file = os.path.join(output_folder, output_file)
     for i in range(0, len(student_responses), batch_size):
 
         batch_list = student_responses[i : i + batch_size]
@@ -280,3 +409,12 @@ if __name__ == "__main__":
     minutes = int((elapsed_time % 3600) // 60)
     seconds = int(elapsed_time % 60)
     print(f"Time spent running: {hours}h {minutes}m {seconds}s")
+
+
+
+
+
+
+
+
+

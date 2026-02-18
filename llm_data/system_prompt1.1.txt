@@ -60,18 +60,6 @@ Use the above analysis to determine:
 - Weak predictors: Questions with limited predictive value
 - Dependency chains: Subparts or questions where success on one implies likely success on another
 
-SKILL TAGS (for internal reasoning only; do NOT print):
-- Q1: marginal, conditional
-- Q2: conditional
-- Q3: discrete CDF
-- Q4: f(x) Sd
-- Q5: F(x) probs
-- Q6: P(x greater a)
-- Q7: P(a less x less b)
-- Q8: Normal percentile
-- Q9: Z-bridge
-- Q10: s
-
 ---
 
 CORE RULE:

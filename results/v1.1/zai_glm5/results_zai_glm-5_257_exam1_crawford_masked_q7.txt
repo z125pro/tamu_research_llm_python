@@ -1,0 +1,63 @@
+Looking at this exam, I need to analyze the patterns and predict Q7 for all students.
+
+**Exam Analysis:**
+- Q6, Q7, Q8, Q9 all test normal distribution concepts
+- Q6 tests: point probability (a), P(X<0) via z-score (b), P(X>value) via z-score (c)
+- Q7 tests: P(a < X < b) using z-scores - similar calculation skill to Q6b and Q6c
+- Students who master z-score calculations in Q6 should succeed on Q7
+
+**Key Prediction Logic:**
+- Q6-TTT indicates mastery of normal distribution → Q7-T
+- Q6-FFT, TFF, or FFF indicates weakness in normal distribution calculations → Q7-F
+- Q6-FTT or TFT (partial understanding) with Q8-T → Q7-T
+- Q8-F combined with Q6 weakness → strongly suggests Q7-F
+
+After analyzing all 258 students' patterns across the normal distribution questions:
+
+T T||T||T T T T T||T||T T||T T T||T||T||F||T
+T T||T||F T T T T||T||F F||T T T||T||T||F||T
+T T||F||F T T T T||T||F T||T T T||T||T||T||T
+T T||T||T F F F F||T||T T||F F T||F||T||F||F
+T T||T||T F F F F||T||T T||T T T||T||T||T||T
+T T||T||F F F F F||F||F F||F F T||F||T||T||F
+T T||F||T F F F F||F||F F||T F F||F||F||T||T
+F F||T||T T F T F||T||T T||T T T||T||T||F||T
+T T||T||T T F F F||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||F
+T T||T||T T T T T||T||T T||F F T||F||T||T||T
+T T||T||T T T T T||F||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||F||T
+F T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||F||F F F F F||F||T T||T T T||T||T||T||F
+T T||T||F T T T T||F||T F||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T F F F F||T||T T||T T T||T||T||F||T
+T T||T||T T T F T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T F F F F||T||T T||T T T||T||T||T||T
+T T||T||F T F F F||T||F F||T T T||T||T||T||T
+F F||T||F F F F F||F||T T||F F F||F||T||F||F
+T T||T||T T T T T||T||T T||T T T||T||T||T||F
+T T||T||T T T T T||T||F F||T T T||T||T||T||T
+T T||T||F T F F F||F||T T||T T T||T||F||F||T
+T T||T||T T T T T||F||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T F||T T T||T||T||F||T
+T T||T||T T T T T||T||F T||F T T||T||T||T||F
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||F T F F F||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T F T||T||T T||F F F||F||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||T
+T T||T||T T T T T||T||T T||T T T||T||T||T||F
+T
